@@ -1,76 +1,75 @@
 <template>
-  <div class="hello">
+  <div>
+    <ATable :tableData="tableData"
+            :columns="columns"
+            :has-select="true"
+            :total="201"
+            @select="select"
+            @pageChange="pageChange" />
     <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a href="https://vuejs.org"
-           target="_blank">
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org"
-           target="_blank">
-          Forum
-        </a>
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org"
-           target="_blank">
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs"
-           target="_blank">
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a href="http://vuejs-templates.github.io/webpack/"
-           target="_blank">
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a href="http://router.vuejs.org/"
-           target="_blank">
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a href="http://vuex.vuejs.org/"
-           target="_blank">
-          vuex
-        </a>
-      </li>
-      <li>
-        <a href="http://vue-loader.vuejs.org/"
-           target="_blank">
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/vuejs/awesome-vue"
-           target="_blank">
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+
   </div>
 </template>
 
 <script>
+import ATable from '@/components/common/ATable.vue'
 export default {
   name: 'HomePage',
+  components: { ATable },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      tableData: [{
+        name: '张三',
+        sex: 1,
+        state: 1
+      }, {
+        name: '李四',
+        sex: 1,
+        state: 1
+      }, {
+        name: '王蕊',
+        sex: 0,
+        state: 0
+      }],
+      columns: [{
+        prop: 'name',
+        label: '姓名'
+      }, {
+        prop: 'sex',
+        label: '性别',
+        render: (h, params) => {
+          if (params.row.sex === 1) {
+            return h('el-tag', '男')
+          } else {
+            return h('el-tag', { attrs: { type: 'danger' } }, '女')
+          }
+        }
+      }, {
+        prop: 'state',
+        label: '操作',
+        render: (h, params) => {
+          return h('el-button', {
+            nativeOn: {
+              click: () => {
+                console.log(params.row.name)
+              }
+            },
+            attrs: { type: 'danger', icon: 'el-icon-delete', disabled: params.row.state === 1 }
+          }, '清空')
+        }
+      }]
+    }
+  },
+  methods: {
+    select: (value, obj) => { // 选中项
+      console.log('select', obj)
+    },
+    removeRow: (row) => {
+      console.log(row.name)
+    },
+    pageChange: (pageIndex) => {
+      console.log('页码' + pageIndex)
     }
   }
 }
@@ -78,24 +77,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-.hello {
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
 </style>
