@@ -70,6 +70,26 @@ export default {
     },
     pageChange: (pageIndex) => {
       console.log('页码' + pageIndex)
+    },
+    getJson(){
+        let that = this
+        that.$axios.get('/list').then(res => {
+            console.log(JSON.stringify(res.data,null,'\t'))
+        })
+    },
+    restart(){
+        let that = this
+        let postData = {
+            username: 'admin',
+            password: '1323',
+            }
+        that.$axios.post('/restart',postData).then(res => {
+           //JSON.stringify(res.data,null,'\t')
+        })
+
+        that.$axios.get('/restart?category=ssd').then(res => {
+           //JSON.stringify(res.data,null,'\t')
+        })
     }
   }
 }
